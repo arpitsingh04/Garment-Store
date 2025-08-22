@@ -1,0 +1,36 @@
+.about-page {
+  margin-top: 80px;
+}
+
+.page-header {
+  background-color: var(--primary-blue);
+  color: var(--text-light);
+  padding: 5rem 0 3rem;
+  text-align: center;
+}
+
+.page-header h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.page-header p {
+  font-size: 1.2rem;
+  max-width: 700px;
+  margin: 0 auto;
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    padding: 4rem 0 2rem;
+  }
+
+  .page-header h1 {
+    font-size: 2.5rem;
+  }
+
+  .page-header p {
+    font-size: 1rem;
+  }
+}

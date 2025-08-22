@@ -1,0 +1,164 @@
+/* AdminContacts uses the same styles as AdminProducts */
+@import './AdminProducts.css';
+
+.admin-contacts {
+  width: 100%;
+}
+
+.contacts-table-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Contact specific styles */
+.email-text {
+  word-break: break-all;
+  max-width: 150px;
+  display: inline-block;
+}
+
+.product-text {
+  max-width: 120px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+}
+
+.date-text {
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.btn-view {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.btn-view:hover {
+  background-color: #2563eb;
+}
+
+/* Contact details modal */
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.detail-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detail-row strong {
+  font-weight: 600;
+  color: var(--text-dark, #1a1a1a);
+  font-size: 0.9rem;
+}
+
+.detail-row span {
+  color: var(--primary-gray, #767676);
+  font-size: 0.9rem;
+}
+
+.email-link a,
+.phone-link a {
+  color: var(--primary-blue, #192870);
+  text-decoration: none;
+}
+
+.email-link a:hover,
+.phone-link a:hover {
+  text-decoration: underline;
+}
+
+.message-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.message-section strong {
+  font-weight: 600;
+  color: var(--text-dark, #1a1a1a);
+  font-size: 0.9rem;
+}
+
+.message-content {
+  background-color: #f9fafb;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #e5e7eb;
+  color: var(--text-dark, #1a1a1a);
+  line-height: 1.5;
+  word-break: break-word;
+  white-space: pre-wrap;
+}
+
+.status-update-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.status-update-section strong {
+  font-weight: 600;
+  color: var(--text-dark, #1a1a1a);
+  font-size: 0.9rem;
+}
+
+.status-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 0.8rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .detail-row {
+    gap: 2px;
+  }
+
+  .detail-row strong {
+    font-size: 0.85rem;
+  }
+
+  .detail-row span {
+    font-size: 0.85rem;
+  }
+
+  .message-content {
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+
+  .status-buttons {
+    flex-direction: column;
+  }
+
+  .btn-sm {
+    width: 100%;
+  }
+}
+
+/* Utility classes for responsive table */
+@media (max-width: 640px) {
+  .sm\:table-cell {
+    display: none;
+  }
+}
+
+@media (min-width: 640px) {
+  .sm\:table-cell {
+    display: table-cell;
+  }
+}

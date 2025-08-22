@@ -1,0 +1,13 @@
+/* AdminGallery uses the same styles as AdminProducts */
+@import './AdminProducts.css';
+
+.admin-gallery {
+  width: 100%;
+}
+
+.gallery-table-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}

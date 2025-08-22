@@ -1,0 +1,26 @@
+.home-page {
+  margin-top: 0;
+  overflow-x: hidden;
+}
+
+/* Ensure proper spacing between sections */
+.home-page > section {
+  position: relative;
+  z-index: 1;
+}
+
+/* Add subtle separation between sections */
+.home-page > section:not(:last-child) {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Ensure sections don't overlap */
+.home-page .featured-products-section,
+.home-page .journey-section {
+  isolation: isolate;
+}

@@ -1,0 +1,245 @@
+.about-content-section {
+  padding: 5rem 0;
+}
+
+.about-intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 5rem;
+  align-items: center;
+}
+
+.about-intro-image {
+  height: 450px;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.about-intro-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about-intro-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1.5rem;
+  color: var(--primary-blue);
+  position: relative;
+}
+
+.about-intro-content h2::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 70px;
+  height: 4px;
+  background-color: var(--primary-red);
+}
+
+.about-intro-content p {
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
+  color: var(--primary-gray);
+}
+
+.about-features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.about-feature {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.about-feature svg {
+  color: var(--primary-red);
+}
+
+.about-mission-vision {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 5rem;
+}
+
+.mission-vision-card {
+  background-color: var(--primary-light-gray);
+  padding: 2.5rem 2rem;
+  border-radius: var(--border-radius);
+  text-align: center;
+  transition: var(--transition);
+  border-bottom: 4px solid transparent;
+}
+
+.mission-vision-card:hover {
+  transform: translateY(-10px);
+  border-bottom-color: var(--primary-red);
+}
+
+.mission-vision-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  color: var(--primary-red);
+}
+
+.mission-vision-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: var(--primary-blue);
+}
+
+.mission-vision-card p {
+  color: var(--primary-gray);
+  line-height: 1.6;
+}
+
+.about-process {
+  padding: 3rem;
+  background-color: var(--primary-light-gray);
+  border-radius: var(--border-radius);
+}
+
+.process-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 3rem;
+  color: var(--primary-blue);
+  position: relative;
+}
+
+.process-title::after {
+  content: '';
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background-color: var(--primary-red);
+}
+
+@media (max-width: 576px) {
+  .process-title {
+    font-size: 1.75rem;
+    margin-bottom: 2.5rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .process-title {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .about-process {
+    padding: 2rem 1.5rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .process-title {
+    font-size: 1.25rem;
+    word-wrap: break-word;
+    hyphens: auto;
+  }
+  
+  .about-process {
+    padding: 1.5rem 1rem;
+  }
+}
+
+.process-steps {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+.process-steps::before {
+  content: '';
+  position: absolute;
+  top: 40px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #ddd;
+  z-index: -1;
+}
+
+.process-step {
+  text-align: center;
+  width: 18%;
+  position: relative;
+}
+
+.process-step-number {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary-red);
+  color: var(--text-light);
+  font-size: 1.5rem;
+  font-weight: 700;
+  border-radius: 50%;
+  margin: 0 auto 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.process-step h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  color: var(--primary-blue);
+}
+
+.process-step p {
+  font-size: 0.9rem;
+  color: var(--primary-gray);
+  line-height: 1.6;
+}
+
+@media (max-width: 991px) {
+  .about-intro {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .about-intro-image {
+    height: 350px;
+  }
+
+  .about-mission-vision {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .process-steps {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .process-steps::before {
+    display: none;
+  }
+
+  .process-step {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-features {
+    grid-template-columns: 1fr;
+  }
+}
