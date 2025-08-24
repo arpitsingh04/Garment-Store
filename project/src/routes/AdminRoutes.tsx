@@ -10,9 +10,12 @@ import AdminTestimonials from '../pages/admin/AdminTestimonials';
 import AdminContacts from '../pages/admin/AdminContacts';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
+
+  console.log('ProtectedRoute: isLoading:', isLoading, 'isAuthenticated:', isAuthenticated, 'user:', user);
 
   if (isLoading) {
+    console.log('ProtectedRoute: Still loading, showing loading screen');
     return (
       <div style={{
         display: 'flex',
@@ -42,9 +45,11 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
   }
 
   if (!isAuthenticated) {
+    console.log('ProtectedRoute: Not authenticated, redirecting to login');
     return <Navigate to="/admin/login" replace />;
   }
 
+  console.log('ProtectedRoute: Authenticated, rendering children');
   return <>{children}</>;
 };
 

@@ -57,19 +57,25 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (credentials: LoginCredentials): Promise<boolean> => {
     try {
       setIsLoading(true);
+      console.log('Starting login process...');
       const response = await authAPI.login(credentials);
+      console.log('Login API response:', response);
 
       if (response.success && response.token && response.data) {
+        console.log('Login successful, setting token and user data');
         localStorage.setItem('admin_token', response.token);
         setUser(response.data);
         toast.success('Login successful!');
+        console.log('Login process completed successfully');
         return true;
       } else {
+        console.log('Login failed - invalid response:', response);
         toast.error(response.message || 'Login failed');
         return false;
       }
     } catch (error: any) {
       console.error('Login error:', error);
+      console.error('Error response:', error.response);
       toast.error(error.response?.data?.message || 'Login failed');
       return false;
     } finally {

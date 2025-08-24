@@ -31,6 +31,33 @@ const AdminLogin: React.FC = () => {
     }
   }, [isAuthenticated, navigate]);
 
+  // Test API connection on component mount
+  useEffect(() => {
+    const testApiConnection = async () => {
+      try {
+        const apiUrl = import.meta.env.PROD 
+          ? 'https://diamond-garment.onrender.com/api/auth/test' 
+          : '/api/auth/test';
+        console.log('Testing API connection to:', apiUrl);
+        
+        const response = await fetch(apiUrl);
+        console.log('API test response status:', response.status);
+        console.log('API test response headers:', response.headers);
+        
+        if (response.ok) {
+          const data = await response.text();
+          console.log('API test response data:', data);
+        } else {
+          console.log('API test failed with status:', response.status);
+        }
+      } catch (error) {
+        console.error('API test error:', error);
+      }
+    };
+
+    testApiConnection();
+  }, []);
+
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     
@@ -40,16 +67,22 @@ const AdminLogin: React.FC = () => {
     };
 
     try {
+      console.log('AdminLogin: Attempting login with credentials:', { email: data.email });
       const success = await login(credentials);
+      console.log('AdminLogin: Login result:', success);
+      
       if (success) {
+        console.log('AdminLogin: Login successful, navigating to /admin');
         navigate('/admin');
       } else {
+        console.log('AdminLogin: Login failed');
         setError('root', {
           type: 'manual',
           message: 'Invalid email or password'
         });
       }
     } catch (error) {
+      console.error('AdminLogin: Login error:', error);
       setError('root', {
         type: 'manual',
         message: 'An error occurred. Please try again.'
@@ -66,6 +99,20 @@ const AdminLogin: React.FC = () => {
           <div className="login-header">
             <h2>Diamond Garment</h2>
             <p>Admin Panel Login</p>
+            {import.meta.env.DEV && (
+              <div style={{ 
+                background: '#f0f8ff', 
+                padding: '10px', 
+                borderRadius: '4px', 
+                fontSize: '12px',
+                marginTop: '10px',
+                border: '1px solid #ccc'
+              }}>
+                <strong>Development Mode - Default Admin Credentials:</strong><br/>
+                Email: admin@diamondgarment.com<br/>
+                Password: admin123
+              </div>
+            )}
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="login-form-content">

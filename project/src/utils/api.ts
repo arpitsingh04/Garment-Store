@@ -44,9 +44,16 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('admin_token');
-      localStorage.removeItem('admin_session_id');
-      window.location.href = '/admin/login';
+      // Only redirect if we're not already on the login page and not during login attempt
+      const currentPath = window.location.hash;
+      const isLoginPage = currentPath.includes('/admin/login');
+      const isLoginRequest = error.config?.url?.includes('/auth/login');
+      
+      if (!isLoginPage && !isLoginRequest) {
+        localStorage.removeItem('admin_token');
+        localStorage.removeItem('admin_session_id');
+        window.location.hash = '#/admin/login';
+      }
     }
     return Promise.reject(error);
   }
