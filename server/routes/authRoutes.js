@@ -7,7 +7,7 @@ import {
 } from '../controllers/authController.js';
 import { protect, authorize } from '../middleware/auth.js';
 import User from '../models/User.js';
-import * as bcrypt from 'bcryptjs';
+import bcrypt from 'bcryptjs';
 
 const router = express.Router();
 
@@ -34,8 +34,9 @@ router.post('/create-admin', async (req, res) => {
     }
 
     console.log('Creating new admin user...');
-    // Using bcrypt.hashSync for synchronous hashing
-    const hashedPassword = bcrypt.hashSync('admin@123', 10);
+    // Generate salt and hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash('admin@123', salt);
     
     const admin = new User({
       name: 'Admin',
