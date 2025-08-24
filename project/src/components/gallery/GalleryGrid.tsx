@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Search, Filter, Grid, Eye, Heart, Share2, Download, Camera } from 'lucide-react';
+import { getApiUrl, API_BASE_URL } from '../../config/api';
 import './GalleryGrid.css';
 
 interface GalleryItem {
@@ -47,7 +48,9 @@ const GalleryGrid: React.FC = () => {
     const fetchGalleryItems = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:5000/api/gallery');
+        const apiUrl = getApiUrl('/gallery');
+        console.log('Fetching gallery from:', apiUrl);
+        const response = await fetch(apiUrl);
 
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
@@ -239,7 +242,7 @@ const GalleryGrid: React.FC = () => {
               >
                 <div className="gallery-image">
                   <img
-                    src={item.image.startsWith('http') ? item.image : `http://localhost:5000${item.image}`}
+                    src={item.image.startsWith('http') ? item.image : `${import.meta.env.PROD ? API_BASE_URL : 'http://localhost:5000'}${item.image}`}
                     alt={item.title}
                     onLoad={() => handleImageLoad(item._id)}
                     loading="lazy"
@@ -324,7 +327,7 @@ const GalleryGrid: React.FC = () => {
                     const link = document.createElement('a');
                     link.href = selectedImage.image.startsWith('http')
                       ? selectedImage.image
-                      : `http://localhost:5000${selectedImage.image}`;
+                      : `${import.meta.env.PROD ? API_BASE_URL : 'http://localhost:5000'}${selectedImage.image}`;
                     link.download = selectedImage.title;
                     link.click();
                   }}
@@ -346,7 +349,7 @@ const GalleryGrid: React.FC = () => {
                 <img
                   src={selectedImage.image.startsWith('http')
                     ? selectedImage.image
-                    : `http://localhost:5000${selectedImage.image}`}
+                    : `${import.meta.env.PROD ? API_BASE_URL : 'http://localhost:5000'}${selectedImage.image}`}
                   alt={selectedImage.title}
                   loading="eager"
                 />

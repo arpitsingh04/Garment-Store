@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import { Star, Quote } from 'lucide-react';
+import { getApiUrl } from '../../config/api';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -37,7 +38,9 @@ const TestimonialsSection: React.FC = () => {
     const fetchTestimonials = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/testimonials');
+        const apiUrl = getApiUrl('/testimonials');
+        console.log('Fetching testimonials from:', apiUrl);
+        const response = await fetch(apiUrl);
         const data = await response.json();
 
         if (data.success) {

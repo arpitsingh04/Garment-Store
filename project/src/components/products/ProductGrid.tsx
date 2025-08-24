@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Phone } from 'lucide-react';
+import { getApiUrl, API_BASE_URL } from '../../config/api';
 import './ProductGrid.css';
 
 interface Product {
@@ -23,7 +24,9 @@ const ProductGrid: React.FC = () => {
     const fetchProducts = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:5000/api/products');
+        const apiUrl = getApiUrl('/products');
+        console.log('Fetching products from:', apiUrl);
+        const response = await fetch(apiUrl);
 
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
@@ -82,7 +85,7 @@ const ProductGrid: React.FC = () => {
               <div className="product-card" key={product._id}>
                 <div className="product-image">
                   <img
-                    src={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`}
+                    src={product.image.startsWith('http') ? product.image : `${import.meta.env.PROD ? API_BASE_URL : 'http://localhost:5000'}${product.image}`}
                     alt={product.name}
                   />
                 </div>

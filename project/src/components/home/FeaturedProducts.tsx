@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
+import { getApiUrl, API_BASE_URL } from '../../config/api';
 import './FeaturedProducts.css';
 
 interface Product {
@@ -49,7 +50,9 @@ const FeaturedProducts: React.FC = () => {
     const fetchFeaturedProducts = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:5000/api/products?featured=true');
+        const apiUrl = getApiUrl('/products?featured=true');
+        console.log('Fetching featured products from:', apiUrl);
+        const response = await fetch(apiUrl);
 
         if (!response.ok) {
           throw new Error(`Error: ${response.status}`);
@@ -91,7 +94,7 @@ const FeaturedProducts: React.FC = () => {
               <div className="product-category-card" key={product._id}>
                 <div className="product-category-image">
                   <img
-                    src={product.image.startsWith('http') ? product.image : `http://localhost:5000${product.image}`}
+                    src={product.image.startsWith('http') ? product.image : `${import.meta.env.PROD ? API_BASE_URL : 'http://localhost:5000'}${product.image}`}
                     alt={product.name}
                   />
                 </div>
