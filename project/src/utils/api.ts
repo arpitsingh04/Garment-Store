@@ -9,12 +9,11 @@ import {
   Contact,
   User
 } from '../types/admin';
-
-const API_BASE_URL = '/api';
+import { API_BASE_URL } from '../config/api';
 
 // Create axios instance
 const api = axios.create({
-  baseURL: API_BASE_URL
+  baseURL: API_BASE_URL || '/api'
 });
 
 // Request interceptor to add auth token
