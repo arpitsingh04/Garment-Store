@@ -63,9 +63,13 @@ const HeroSection: React.FC = () => {
             <Link to="/products" className="btn">
               Explore Products
             </Link>
-            <Link to="/contact" className="btn btn-outline">
-              Contact Us
-            </Link>
+            <a 
+              href="/dgcatlog.pdf" 
+              download="Diamond-Garment-Catalog.pdf"
+              className="btn btn-outline"
+            >
+              Download Catalog
+            </a>
           </div>
         </div>
 
