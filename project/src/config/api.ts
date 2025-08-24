@@ -2,7 +2,8 @@
 const getApiBaseUrl = (): string => {
   // In production, use the deployed backend URL
   if (import.meta.env.PROD) {
-    return import.meta.env.VITE_API_BASE_URL || 'https://your-backend-app.onrender.com';
+    // Replace this with your actual Render backend URL
+    return import.meta.env.VITE_API_BASE_URL || 'https://diamond-garment-backend.onrender.com';
   }
   
   // In development, use the proxy or localhost
@@ -19,8 +20,13 @@ export const getApiUrl = (endpoint: string): string => {
   
   // Always use full URL in production (shared hosting)
   if (import.meta.env.PROD) {
-    const baseUrl = API_BASE_URL || 'https://your-backend-app.onrender.com';
-    return `${baseUrl}${endpoint.startsWith('/api') ? endpoint : `/api/${endpoint.replace(/^\//, '')}`}`;
+    const baseUrl = API_BASE_URL || 'https://diamond-garment-backend.onrender.com';
+    // Ensure /api is always included
+    if (endpoint.startsWith('/api')) {
+      return `${baseUrl}${endpoint}`;
+    } else {
+      return `${baseUrl}/api/${endpoint.replace(/^\//, '')}`;
+    }
   }
   
   // In development, use proxy
