@@ -67,7 +67,7 @@ const Footer: React.FC = () => {
             </li>
             <li>
               <MailIcon size={18} />
-              <span>diamondgarment115@gmail.com</span>
+              <span>diamondgarments115@gmail.com</span>
             </li>
           </ul>
         </div>
