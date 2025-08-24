@@ -1,6 +1,7 @@
 import React from 'react';
 import { CheckCircle, Shirt, Award, Clock } from 'lucide-react';
 import './AboutContent.css';
+import dgudyamImage from '../../assets/images/dgudyam.jpg';
 
 const AboutContent: React.FC = () => {
   return (
@@ -9,7 +10,7 @@ const AboutContent: React.FC = () => {
         <div className="about-intro">
           <div className="about-intro-image">
             <img 
-              src="https://images.pexels.com/photos/3987277/pexels-photo-3987277.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+              src={dgudyamImage} 
               alt="Diamond Garment Factory" 
             />
           </div>
