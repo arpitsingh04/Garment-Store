@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
@@ -16,7 +16,7 @@ import AdminRoutes from './routes/AdminRoutes';
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <HashRouter>
         <ScrollToTop />
         <Routes>
           {/* Admin Routes */}
@@ -76,7 +76,7 @@ function App() {
             },
           }}
         />
-      </BrowserRouter>
+      </HashRouter>
     </AuthProvider>
   );
 }
