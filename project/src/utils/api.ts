@@ -14,7 +14,7 @@ import { API_BASE_URL, getApiUrl } from '../config/api';
 // Create axios instance with proper base URL
 const getBaseURL = () => {
   if (import.meta.env.PROD) {
-    return API_BASE_URL ? `${API_BASE_URL}/api` : 'https://diamond-garment-backend.onrender.com/api';
+    return API_BASE_URL ? `${API_BASE_URL}/api` : 'https://diamond-garment.onrender.com/api';
   }
   return '/api';
 };

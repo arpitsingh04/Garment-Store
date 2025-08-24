@@ -63,7 +63,7 @@ const Footer: React.FC = () => {
             </li>
             <li>
               <PhoneIcon size={18} />
-              <span>+91 75334 556 / +91 70204 60115</span>
+              <span>+91 9175334 556 / +91 70204 60115</span>
             </li>
             <li>
               <MailIcon size={18} />
