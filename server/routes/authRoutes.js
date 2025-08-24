@@ -20,19 +20,44 @@ router.get('/test', (req, res) => {
 
 router.post('/create-admin', async (req, res) => {
   try {
-    const bcrypt = await import('bcryptjs');
+    // Check if admin already exists
+    console.log('Checking for existing admin...');
+    const existingAdmin = await User.findOne({ email: 'diamondgarment@gmail.com' });
+    
+    if (existingAdmin) {
+      console.log('Admin already exists');
+      return res.status(400).json({
+        success: false,
+        message: 'Admin user already exists'
+      });
+    }
+
+    console.log('Creating new admin user...');
     const hashedPassword = await bcrypt.hash('admin@123', 10);
+    
     const admin = new User({
       name: 'Admin',
       email: 'diamondgarment@gmail.com',
       password: hashedPassword,
-      role: 'admin',
+      role: 'admin'
     });
 
-    await admin.save();
-    res.status(201).json({ message: 'Admin user created successfully' });
+    console.log('Saving admin user...');
+    const savedAdmin = await admin.save();
+    console.log('Admin user saved successfully:', savedAdmin);
+
+    res.status(201).json({
+      success: true,
+      message: 'Admin user created successfully'
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Error creating admin user', error });
+    console.error('Error creating admin user:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error creating admin user',
+      error: error.message,
+      stack: error.stack
+    });
   }
 });
 
