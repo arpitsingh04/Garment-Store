@@ -9,11 +9,18 @@ import {
   Contact,
   User
 } from '../types/admin';
-import { API_BASE_URL } from '../config/api';
+import { API_BASE_URL, getApiUrl } from '../config/api';
 
-// Create axios instance
+// Create axios instance with proper base URL
+const getBaseURL = () => {
+  if (import.meta.env.PROD) {
+    return API_BASE_URL ? `${API_BASE_URL}/api` : 'https://diamond-garment-backend.onrender.com/api';
+  }
+  return '/api';
+};
+
 const api = axios.create({
-  baseURL: API_BASE_URL || '/api'
+  baseURL: getBaseURL()
 });
 
 // Request interceptor to add auth token
