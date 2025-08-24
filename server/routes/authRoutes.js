@@ -13,5 +13,8 @@ router.post('/register', protect, authorize('admin'), register);
 router.post('/login', login);
 router.get('/me', protect, getMe);
 router.get('/logout', logout);
+router.get('/test', (req, res) => {
+  res.status(200).json({ message: 'API is working' });
+});
 
 export default router;

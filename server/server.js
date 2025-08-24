@@ -25,7 +25,7 @@ const __dirname = path.dirname(__filename);
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:5173' , 'https://diamondgarment.com'], // Allow both React and Vite default ports
+  origin: ['http://localhost:3000', 'http://localhost:5173', 'https://diamondgarment.com', 'https://www.diamondgarment.com'],
   credentials: true
 }));
 app.use(express.json());
