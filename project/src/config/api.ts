@@ -17,8 +17,10 @@ export const getApiUrl = (endpoint: string): string => {
     return endpoint; // Already a full URL
   }
   
+  // Always use full URL in production (shared hosting)
   if (import.meta.env.PROD) {
-    return `${API_BASE_URL}${endpoint.startsWith('/') ? endpoint : `/${endpoint}`}`;
+    const baseUrl = API_BASE_URL || 'https://your-backend-app.onrender.com';
+    return `${baseUrl}${endpoint.startsWith('/api') ? endpoint : `/api/${endpoint.replace(/^\//, '')}`}`;
   }
   
   // In development, use proxy

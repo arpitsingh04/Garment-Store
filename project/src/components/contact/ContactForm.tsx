@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Send } from 'lucide-react';
+import { getApiUrl } from '../../config/api';
 import './ContactForm.css';
 
 const ContactForm: React.FC = () => {
@@ -31,7 +32,7 @@ const ContactForm: React.FC = () => {
 
     try {
       // Use the full URL to the backend server
-      const response = await fetch('http://localhost:5000/api/contact', {
+      const response = await fetch(getApiUrl('/api/contact'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
