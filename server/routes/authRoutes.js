@@ -34,14 +34,10 @@ router.post('/create-admin', async (req, res) => {
     }
 
     console.log('Creating new admin user...');
-    // Generate salt and hash password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash('admin@123', salt);
-    
     const admin = new User({
       name: 'Admin',
       email: 'diamondgarment@gmail.com',
-      password: hashedPassword,
+      password: 'admin@123', // Raw password - will be hashed by middleware
       role: 'admin'
     });
 
