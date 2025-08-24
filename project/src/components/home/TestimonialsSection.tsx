@@ -25,12 +25,19 @@ const TestimonialsSection: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Function to get correct image source
+  const getImageSrc = (image: string) => {
+    if (image.startsWith('http')) return image;
+    if (image.startsWith('/uploads/')) return image;
+    return `/uploads/${image}`;
+  };
+
   // Fetch testimonials from API
   useEffect(() => {
     const fetchTestimonials = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:5000/api/testimonials');
+        const response = await fetch('/api/testimonials');
         const data = await response.json();
 
         if (data.success) {
@@ -48,6 +55,7 @@ const TestimonialsSection: React.FC = () => {
 
     fetchTestimonials();
   }, []);
+
   // Function to render star ratings
   const renderStars = (rating: number) => {
     const stars = [];
@@ -142,7 +150,14 @@ const TestimonialsSection: React.FC = () => {
                 <div className="testimonial-slide">
                   <div className="testimonial-header">
                     <div className="testimonial-image">
-                      <img src={testimonial.image} alt={testimonial.name} />
+                      <img 
+                        src={getImageSrc(testimonial.image)} 
+                        alt={testimonial.name}
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = '/api/placeholder/80/80';
+                        }}
+                      />
                     </div>
                     <div className="testimonial-meta">
                       <h3 className="author-name">{testimonial.name}</h3>

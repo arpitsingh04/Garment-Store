@@ -143,123 +143,119 @@ const InteractiveContactForm: React.FC = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="contact-form">
-        <div className="form-row">
-          <div className={`form-group ${focusedField === 'name' ? 'focused' : ''} ${isFieldValid('name') ? 'valid' : ''}`}>
-            <div className="input-wrapper">
-              <div className="input-icon">
-                {getFieldIcon('name')}
-              </div>
-              <input
-                type="text"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                onFocus={() => setFocusedField('name')}
-                onBlur={() => setFocusedField('')}
-                placeholder="Your Name *"
-                required
-              />
-              {isFieldValid('name') && (
-                <div className="validation-icon">
-                  <CheckCircle size={16} />
-                </div>
-              )}
+        <div className={`form-group full-width ${focusedField === 'name' ? 'focused' : ''} ${isFieldValid('name') ? 'valid' : ''}`}>
+          <div className="input-wrapper">
+            <div className="input-icon">
+              {getFieldIcon('name')}
             </div>
-            {errors.name && (
-              <div className="error-message">
-                <AlertCircle size={14} />
-                {errors.name}
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              onFocus={() => setFocusedField('name')}
+              onBlur={() => setFocusedField('')}
+              placeholder="Your Name *"
+              required
+            />
+            {isFieldValid('name') && (
+              <div className="validation-icon">
+                <CheckCircle size={16} />
               </div>
             )}
           </div>
-
-          <div className={`form-group ${focusedField === 'email' ? 'focused' : ''} ${isFieldValid('email') ? 'valid' : ''}`}>
-            <div className="input-wrapper">
-              <div className="input-icon">
-                {getFieldIcon('email')}
-              </div>
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                onFocus={() => setFocusedField('email')}
-                onBlur={() => setFocusedField('')}
-                placeholder="Your Email *"
-                required
-              />
-              {isFieldValid('email') && (
-                <div className="validation-icon">
-                  <CheckCircle size={16} />
-                </div>
-              )}
+          {errors.name && (
+            <div className="error-message">
+              <AlertCircle size={14} />
+              {errors.name}
             </div>
-            {errors.email && (
-              <div className="error-message">
-                <AlertCircle size={14} />
-                {errors.email}
-              </div>
-            )}
-          </div>
+          )}
         </div>
 
-        <div className="form-row">
-          <div className={`form-group ${focusedField === 'phone' ? 'focused' : ''} ${isFieldValid('phone') ? 'valid' : ''}`}>
-            <div className="input-wrapper">
-              <div className="input-icon">
-                {getFieldIcon('phone')}
-              </div>
-              <input
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                onFocus={() => setFocusedField('phone')}
-                onBlur={() => setFocusedField('')}
-                placeholder="Your Phone (Optional)"
-              />
-              {isFieldValid('phone') && (
-                <div className="validation-icon">
-                  <CheckCircle size={16} />
-                </div>
-              )}
+        <div className={`form-group full-width ${focusedField === 'email' ? 'focused' : ''} ${isFieldValid('email') ? 'valid' : ''}`}>
+          <div className="input-wrapper">
+            <div className="input-icon">
+              {getFieldIcon('email')}
             </div>
-            {errors.phone && (
-              <div className="error-message">
-                <AlertCircle size={14} />
-                {errors.phone}
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              onFocus={() => setFocusedField('email')}
+              onBlur={() => setFocusedField('')}
+              placeholder="Your Email *"
+              required
+            />
+            {isFieldValid('email') && (
+              <div className="validation-icon">
+                <CheckCircle size={16} />
               </div>
             )}
           </div>
+          {errors.email && (
+            <div className="error-message">
+              <AlertCircle size={14} />
+              {errors.email}
+            </div>
+          )}
+        </div>
 
-          <div className={`form-group ${focusedField === 'subject' ? 'focused' : ''} ${isFieldValid('subject') ? 'valid' : ''}`}>
-            <div className="input-wrapper">
-              <div className="input-icon">
-                {getFieldIcon('subject')}
-              </div>
-              <input
-                type="text"
-                name="subject"
-                value={formData.subject}
-                onChange={handleInputChange}
-                onFocus={() => setFocusedField('subject')}
-                onBlur={() => setFocusedField('')}
-                placeholder="Subject *"
-                required
-              />
-              {isFieldValid('subject') && (
-                <div className="validation-icon">
-                  <CheckCircle size={16} />
-                </div>
-              )}
+        <div className={`form-group full-width ${focusedField === 'phone' ? 'focused' : ''} ${isFieldValid('phone') ? 'valid' : ''}`}>
+          <div className="input-wrapper">
+            <div className="input-icon">
+              {getFieldIcon('phone')}
             </div>
-            {errors.subject && (
-              <div className="error-message">
-                <AlertCircle size={14} />
-                {errors.subject}
+            <input
+              type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
+              onFocus={() => setFocusedField('phone')}
+              onBlur={() => setFocusedField('')}
+              placeholder="Your Phone (Optional)"
+            />
+            {isFieldValid('phone') && (
+              <div className="validation-icon">
+                <CheckCircle size={16} />
               </div>
             )}
           </div>
+          {errors.phone && (
+            <div className="error-message">
+              <AlertCircle size={14} />
+              {errors.phone}
+            </div>
+          )}
+        </div>
+
+        <div className={`form-group full-width ${focusedField === 'subject' ? 'focused' : ''} ${isFieldValid('subject') ? 'valid' : ''}`}>
+          <div className="input-wrapper">
+            <div className="input-icon">
+              {getFieldIcon('subject')}
+            </div>
+            <input
+              type="text"
+              name="subject"
+              value={formData.subject}
+              onChange={handleInputChange}
+              onFocus={() => setFocusedField('subject')}
+              onBlur={() => setFocusedField('')}
+              placeholder="Subject *"
+              required
+            />
+            {isFieldValid('subject') && (
+              <div className="validation-icon">
+                <CheckCircle size={16} />
+              </div>
+            )}
+          </div>
+          {errors.subject && (
+            <div className="error-message">
+              <AlertCircle size={14} />
+              {errors.subject}
+            </div>
+          )}
         </div>
 
         <div className={`form-group full-width ${focusedField === 'message' ? 'focused' : ''} ${isFieldValid('message') ? 'valid' : ''}`}>

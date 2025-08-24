@@ -14,10 +14,7 @@ const API_BASE_URL = '/api';
 
 // Create axios instance
 const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+  baseURL: API_BASE_URL
 });
 
 // Request interceptor to add auth token
@@ -250,11 +247,8 @@ export const uploadAPI = {
     const formData = new FormData();
     formData.append('image', file);
 
-    const response: AxiosResponse<ApiResponse<{ filePath: string }>> = await api.post('/upload', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    // Do not set Content-Type manually; let the browser add the correct multipart boundary
+    const response: AxiosResponse<ApiResponse<{ filePath: string }>> = await api.post('/upload', formData);
     return response.data;
   }
 };

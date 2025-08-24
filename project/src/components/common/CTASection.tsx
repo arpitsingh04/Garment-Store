@@ -13,7 +13,7 @@ const CTASection: React.FC = () => {
           <Link to="/contact" className="btn cta-button">
             Place Bulk Order
           </Link>
-           <Link to="tel:+917533455" className="btn btn-call">
+           <Link to="tel:+917020460115" className="btn btn-call">
                     <PhoneIcon size={16} /> Call to Order
                   </Link>
         </div>

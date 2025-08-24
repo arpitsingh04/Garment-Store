@@ -9,11 +9,13 @@
   max-width: 1000px;
   margin: 0 auto;
   position: relative;
+  padding: 0 1rem;
 }
 
 .quote-icon {
   position: absolute;
   z-index: 1;
+  pointer-events: none;
 }
 
 .quote-icon.left {
@@ -39,6 +41,8 @@
   margin: 1rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   border: 1px solid rgba(0, 0, 0, 0.05);
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .testimonial-slide:hover {
@@ -51,6 +55,7 @@
   align-items: center;
   margin-bottom: 1.5rem;
   text-align: left;
+  gap: 1.5rem;
 }
 
 .testimonial-image {
@@ -75,13 +80,32 @@
 }
 
 .testimonial-meta {
-  margin-left: 1.5rem;
+  flex: 1;
+  min-width: 0; /* Allow text to shrink */
+}
+
+.author-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--primary-blue);
+  margin-bottom: 0.25rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.author-title {
+  font-size: 0.9rem;
+  color: var(--primary-gray);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.4;
 }
 
 .testimonial-rating {
   display: flex;
   gap: 0.25rem;
   margin-top: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .star {
@@ -105,79 +129,58 @@
   line-height: 1.8;
   color: var(--primary-gray);
   font-style: italic;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  margin: 0;
 }
 
-.author-name {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: var(--primary-blue);
-  margin-bottom: 0.25rem;
+/* Swiper Pagination Styling */
+.testimonials-swiper .swiper-pagination {
+  bottom: 0;
 }
 
-.author-title {
-  font-size: 0.9rem;
-  color: var(--primary-gray);
-}
-
-/* Swiper Navigation and Pagination Styling */
-/* .swiper-button-next,
-.swiper-button-prev {
-  color: var(--primary-red);
-  background-color: rgba(255, 255, 255, 0.8);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.swiper-button-next:hover,
-.swiper-button-prev:hover {
-  background-color: var(--primary-red);
-  color: white;
-}
-
-.swiper-button-next:after,
-.swiper-button-prev:after {
-  font-size: 1.2rem;
-  font-weight: bold;
-}
-
-.swiper-pagination-bullet {
-  width: 10px;
-  height: 10px;
+.testimonials-swiper .swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
   background-color: var(--primary-blue);
   opacity: 0.3;
   transition: all 0.3s ease;
 }
 
-.swiper-pagination-bullet-active {
+.testimonials-swiper .swiper-pagination-bullet-active {
   opacity: 1;
   background-color: var(--primary-red);
-  width: 25px;
-  border-radius: 5px;
-} */
+  width: 30px;
+  border-radius: 6px;
+}
 
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
   .testimonials-section {
     padding: 4rem 0;
   }
 
+  .testimonials-container {
+    padding: 0 0.5rem;
+  }
+
   .testimonial-slide {
     padding: 1.5rem;
+    margin: 0.5rem;
   }
 
   .testimonial-header {
     flex-direction: column;
     text-align: center;
+    gap: 1rem;
   }
 
   .testimonial-meta {
-    margin-left: 0;
-    margin-top: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
+    text-align: center;
   }
 
   .testimonial-rating {
@@ -186,10 +189,66 @@
 
   .testimonial-text {
     font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .testimonial-content {
+    padding: 1rem;
   }
 
   .quote-icon {
     display: none;
+  }
+
+  .author-name {
+    font-size: 1.1rem;
+  }
+
+  .author-title {
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .testimonials-section {
+    padding: 3rem 0;
+  }
+
+  .testimonials-container {
+    padding: 0 0.25rem;
+  }
+
+  .testimonial-slide {
+    padding: 1rem;
+    margin: 0.25rem;
+  }
+
+  .testimonial-image {
+    width: 60px;
+    height: 60px;
+    border-width: 3px;
+  }
+
+  .testimonial-text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .testimonial-content {
+    padding: 0.75rem;
+  }
+
+  .author-name {
+    font-size: 1rem;
+  }
+
+  .author-title {
+    font-size: 0.8rem;
+  }
+
+  .star {
+    width: 16px;
+    height: 16px;
   }
 }
 
@@ -237,5 +296,20 @@
   .error-message p,
   .empty-message p {
     font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .loading-message,
+  .error-message,
+  .empty-message {
+    padding: 1.5rem 0.75rem;
+    margin: 0.5rem 0;
+  }
+
+  .loading-message p,
+  .error-message p,
+  .empty-message p {
+    font-size: 0.9rem;
   }
 }

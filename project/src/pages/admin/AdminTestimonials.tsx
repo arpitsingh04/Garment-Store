@@ -407,16 +407,16 @@ const AdminTestimonials: React.FC = () => {
               className={`form-control ${errors.testimonial ? 'error' : ''}`}
               rows={4}
               maxLength={1000}
-              placeholder="Enter testimonial text (100-1000 characters, approximately 20-200 words)"
+              placeholder="Enter testimonial text (10-1000 characters, approximately 2-200 words)"
               {...register('testimonial', { 
                 required: 'Testimonial text is required',
-                minLength: { value: 100, message: 'Testimonial must be at least 100 characters' },
+                minLength: { value: 10, message: 'Testimonial must be at least 10 characters' },
                 maxLength: { value: 1000, message: 'Testimonial cannot exceed 1000 characters' }
               })}
             />
             <div className="char-counter">
-              <span className={charCount < 100 ? 'text-red' : ''}>{charCount}</span>/1000 characters 
-              {charCount < 100 && ' (minimum 100 required)'}
+              <span className={charCount < 10 ? 'text-red' : ''}>{charCount}</span>/1000 characters 
+              {charCount < 10 && ' (minimum 10 required)'}
             </div>
             {errors.testimonial && (
               <span className="error-message">{errors.testimonial.message}</span>

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { PhoneIcon, MailIcon, MapPinIcon, FacebookIcon, InstagramIcon, LinkedinIcon } from './Icons';
 import './Footer.css';
-import logo from '../../assets/images/logo.png';
+import logo from '../../assets/images/logofav.png';
 
 const Footer: React.FC = () => {
   return (

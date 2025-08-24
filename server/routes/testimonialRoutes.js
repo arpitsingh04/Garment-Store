@@ -12,6 +12,20 @@ import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
 
+// Custom image validator that accepts both URLs and local upload paths
+const imageValidator = (value) => {
+  if (!value) return false;
+  // Accept full URLs (http/https)
+  if (value.startsWith('http://') || value.startsWith('https://')) {
+    return true;
+  }
+  // Accept local upload paths
+  if (value.startsWith('/uploads/')) {
+    return true;
+  }
+  return false;
+};
+
 // Validation rules
 const testimonialValidation = [
   body('name')
@@ -29,8 +43,8 @@ const testimonialValidation = [
   body('image')
     .notEmpty()
     .withMessage('Image is required')
-    .isURL()
-    .withMessage('Image must be a valid URL'),
+    .custom(imageValidator)
+    .withMessage('Image must be a valid URL or upload path'),
   body('testimonial')
     .trim()
     .isLength({ min: 100, max: 1000 })
@@ -50,10 +64,10 @@ const testimonialValidation = [
 
 // Public routes
 router.get('/', getTestimonials);
-router.get('/:id', getTestimonial);
 
-// Protected admin routes
+// Protected admin routes - IMPORTANT: Put specific routes before parameterized ones
 router.get('/admin/all', protect, getAllTestimonialsAdmin);
+router.get('/:id', getTestimonial);
 router.post('/', protect, testimonialValidation, createTestimonial);
 router.put('/:id', protect, testimonialValidation, updateTestimonial);
 router.delete('/:id', protect, deleteTestimonial);

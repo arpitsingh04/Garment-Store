@@ -14,6 +14,7 @@ import contactRoutes from './routes/contactRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import testimonialRoutes from './routes/testimonialRoutes.js';
+import placeholderRoutes from './routes/placeholderRoutes.js';
 
 // Configuration
 dotenv.config();
@@ -46,6 +47,7 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/testimonials', testimonialRoutes);
+app.use('/api/placeholder', placeholderRoutes);
 
 // Serve uploaded files
 app.use('/uploads', express.static(path.join(__dirname, 'public/uploads')));

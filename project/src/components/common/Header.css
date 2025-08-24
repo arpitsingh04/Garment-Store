@@ -27,9 +27,9 @@
 }
 
 .logo {
-  height: 50px;
+  height: 55px;
   width: auto;
-  padding: 5px;
+  /* padding: 5px; */
   border-radius: var(--border-radius);
   transition: var(--transition);
 }
