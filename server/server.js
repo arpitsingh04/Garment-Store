@@ -32,6 +32,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+// Handle preflight requests
+app.options('*', cors());
+
 // Create uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, 'public/uploads');
 if (!fs.existsSync(uploadsDir)) {
