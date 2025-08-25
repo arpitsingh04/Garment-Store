@@ -64,11 +64,11 @@
   }
 }
 
-@media (max-width: 576px) {
+/* @media (max-width: 576px) {
   .logo-text {
     display: none;
   }
-}
+} */
 
 .header.scrolled .logo {
   height: 45px;

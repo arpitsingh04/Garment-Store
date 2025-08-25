@@ -11,25 +11,38 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/diamond-g
 // Create admin user
 const createAdmin = async () => {
   try {
-    // Check if admin already exists
-    const adminExists = await User.findOne({ email: 'admin@diamondgarment.com' });
+    console.log('Starting admin creation process...');
     
-    if (adminExists) {
-      console.log('Admin user already exists');
-      process.exit();
-    }
+    // Delete existing admin if exists
+    await User.deleteOne({ email: 'admin@diamondgarment.com' });
+    console.log('Cleared existing admin user');
     
-    await User.create({
+    // Create new admin user
+    const admin = await User.create({
       name: 'Admin User',
       email: 'admin@diamondgarment.com',
       password: 'admin123',
       role: 'admin'
     });
     
-    console.log('Admin user created successfully');
+    console.log('Admin user created successfully:', {
+      id: admin._id,
+      name: admin.name,
+      email: admin.email,
+      role: admin.role
+    });
+    
+    // Verify the admin was created
+    const verifyAdmin = await User.findOne({ email: 'admin@diamondgarment.com' }).select('+password');
+    console.log('Admin verification:', {
+      found: !!verifyAdmin,
+      email: verifyAdmin?.email,
+      hasPassword: !!verifyAdmin?.password
+    });
+    
     process.exit();
   } catch (error) {
-    console.error(error);
+    console.error('Error creating admin:', error);
     process.exit(1);
   }
 };

@@ -9,7 +9,9 @@
     "dev": "nodemon server.js",
     "seed:admin": "node utils/seedAdmin.js",
     "seed:data": "node utils/seedData.js",
-    "seed": "npm run seed:admin && npm run seed:data"
+    "seed": "npm run seed:admin && npm run seed:data",
+    "reset:admin": "node -e \"import('./utils/seedAdmin.js')\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -24,5 +26,8 @@
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=14.0.0"
   }
 }

@@ -9,18 +9,26 @@ import {
   Contact,
   User
 } from '../types/admin';
-import { API_BASE_URL, getApiUrl } from '../config/api';
+import { API_BASE_URL, getApiUrl, debugApiConfig } from '../config/api';
+
+// Debug API configuration on load
+debugApiConfig();
 
 // Create axios instance with proper base URL
 const getBaseURL = () => {
   if (import.meta.env.PROD) {
-    return API_BASE_URL ? `${API_BASE_URL}/api` : 'https://diamond-garment.onrender.com/api';
+    const baseUrl = API_BASE_URL || 'https://diamond-garment.onrender.com';
+    return `${baseUrl}/api`;
   }
   return '/api';
 };
 
 const api = axios.create({
-  baseURL: getBaseURL()
+  baseURL: getBaseURL(),
+  timeout: 30000, // 30 second timeout
+  headers: {
+    'Content-Type': 'application/json',
+  }
 });
 
 // Request interceptor to add auth token
@@ -36,13 +44,40 @@ api.interceptors.request.use((config) => {
     config.headers['X-Session-ID'] = sessionId;
   }
 
+  // Log request in development
+  if (!import.meta.env.PROD) {
+    console.log('API Request:', {
+      method: config.method?.toUpperCase(),
+      url: config.url,
+      baseURL: config.baseURL,
+      fullUrl: `${config.baseURL}${config.url}`
+    });
+  }
+
   return config;
 });
 
 // Response interceptor to handle auth errors
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // Log response in development
+    if (!import.meta.env.PROD) {
+      console.log('API Response:', {
+        status: response.status,
+        url: response.config.url,
+        data: response.data
+      });
+    }
+    return response;
+  },
   (error) => {
+    console.error('API Error:', {
+      status: error.response?.status,
+      message: error.response?.data?.message || error.message,
+      url: error.config?.url,
+      fullUrl: error.config ? `${error.config.baseURL}${error.config.url}` : 'unknown'
+    });
+
     if (error.response?.status === 401) {
       // Only redirect if we're not already on the login page and not during login attempt
       const currentPath = window.location.hash;
@@ -108,8 +143,8 @@ export const authAPI = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
     try {
       const browserInfo = getBrowserInfo();
-      console.log('Making login request with:', {
-        ...credentials,
+      console.log('Making login request with credentials:', {
+        email: credentials.email,
         password: '[HIDDEN]',
         clientInfo: {
           browser: browserInfo.browser,
@@ -127,7 +162,12 @@ export const authAPI = {
         }
       });
 
-      console.log('Login response received:', response.data);
+      console.log('Login response received:', {
+        success: response.data.success,
+        hasToken: !!response.data.token,
+        hasData: !!response.data.data
+      });
+      
       return response.data;
     } catch (error) {
       console.error('Login API error:', error);
@@ -136,13 +176,30 @@ export const authAPI = {
   },
 
   logout: async (): Promise<void> => {
-    await api.post('/auth/logout');
-    localStorage.removeItem('admin_token');
-    localStorage.removeItem('admin_session_id');
+    try {
+      await api.post('/auth/logout');
+    } catch (error) {
+      console.error('Logout API error:', error);
+    } finally {
+      localStorage.removeItem('admin_token');
+      localStorage.removeItem('admin_session_id');
+    }
   },
 
   getMe: async (): Promise<ApiResponse<User>> => {
     const response: AxiosResponse<ApiResponse<User>> = await api.get('/auth/me');
+    return response.data;
+  },
+
+  // Helper method to create admin (for initial setup)
+  createAdmin: async (): Promise<ApiResponse<any>> => {
+    const response: AxiosResponse<ApiResponse<any>> = await api.post('/auth/create-admin');
+    return response.data;
+  },
+
+  // Helper method to reset admin (emergency use)
+  resetAdmin: async (): Promise<ApiResponse<any>> => {
+    const response: AxiosResponse<ApiResponse<any>> = await api.post('/auth/reset-admin');
     return response.data;
   }
 };
@@ -260,8 +317,11 @@ export const uploadAPI = {
     const formData = new FormData();
     formData.append('image', file);
 
-    // Do not set Content-Type manually; let the browser add the correct multipart boundary
-    const response: AxiosResponse<ApiResponse<{ filePath: string }>> = await api.post('/upload', formData);
+    const response: AxiosResponse<ApiResponse<{ filePath: string }>> = await api.post('/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return response.data;
   }
 };

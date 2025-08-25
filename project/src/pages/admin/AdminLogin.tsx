@@ -4,6 +4,8 @@ import { useForm } from 'react-hook-form';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import { LoginCredentials } from '../../types/admin';
+import { authAPI } from '../../utils/api';
+import toast from 'react-hot-toast';
 import './AdminLogin.css';
 
 interface LoginFormData {
@@ -12,85 +14,101 @@ interface LoginFormData {
 }
 
 const AdminLogin: React.FC = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const { login, isAuthenticated, isLoading: authLoading } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [isCreatingAdmin, setIsCreatingAdmin] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setError
+    setValue
   } = useForm<LoginFormData>();
 
-  // Redirect if already authenticated
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/admin');
+    if (isAuthenticated && !authLoading) {
+      console.log('User is authenticated, redirecting to dashboard');
+      navigate('/admin', { replace: true });
     }
-  }, [isAuthenticated, navigate]);
-
-  // Test API connection on component mount
-  useEffect(() => {
-    const testApiConnection = async () => {
-      try {
-        const apiUrl = import.meta.env.PROD 
-          ? 'https://diamond-garment.onrender.com/api/auth/test' 
-          : '/api/auth/test';
-        console.log('Testing API connection to:', apiUrl);
-        
-        const response = await fetch(apiUrl);
-        console.log('API test response status:', response.status);
-        console.log('API test response headers:', response.headers);
-        
-        if (response.ok) {
-          const data = await response.text();
-          console.log('API test response data:', data);
-        } else {
-          console.log('API test failed with status:', response.status);
-        }
-      } catch (error) {
-        console.error('API test error:', error);
-      }
-    };
-
-    testApiConnection();
-  }, []);
+  }, [isAuthenticated, authLoading, navigate]);
 
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
+    console.log('Login form submitted with:', { email: data.email, password: '[HIDDEN]' });
     
-    const credentials: LoginCredentials = {
-      email: data.email,
-      password: data.password
-    };
-
     try {
-      console.log('AdminLogin: Attempting login with credentials:', { email: data.email });
-      const success = await login(credentials);
-      console.log('AdminLogin: Login result:', success);
-      
+      const success = await login(data as LoginCredentials);
       if (success) {
-        console.log('AdminLogin: Login successful, navigating to /admin');
-        navigate('/admin');
-      } else {
-        console.log('AdminLogin: Login failed');
-        setError('root', {
-          type: 'manual',
-          message: 'Invalid email or password'
-        });
+        console.log('Login successful, navigating to dashboard');
+        navigate('/admin', { replace: true });
       }
     } catch (error) {
-      console.error('AdminLogin: Login error:', error);
-      setError('root', {
-        type: 'manual',
-        message: 'An error occurred. Please try again.'
-      });
+      console.error('Login submission error:', error);
     } finally {
       setIsLoading(false);
     }
   };
+
+  const handleCreateAdmin = async () => {
+    setIsCreatingAdmin(true);
+    try {
+      console.log('Creating admin account...');
+      const response = await authAPI.createAdmin();
+      if (response.success) {
+        toast.success('Admin account created successfully!');
+        // Auto-fill the form with default credentials
+        setValue('email', 'admin@diamondgarment.com');
+        setValue('password', 'admin123');
+      } else {
+        toast.error(response.message || 'Failed to create admin account');
+      }
+    } catch (error: any) {
+      console.error('Admin creation error:', error);
+      toast.error(error.response?.data?.message || 'Failed to create admin account');
+    } finally {
+      setIsCreatingAdmin(false);
+    }
+  };
+
+  const handleResetAdmin = async () => {
+    if (!confirm('Are you sure you want to reset the admin account? This will delete all existing admin users.')) {
+      return;
+    }
+
+    setIsCreatingAdmin(true);
+    try {
+      console.log('Resetting admin account...');
+      const response = await authAPI.resetAdmin();
+      if (response.success) {
+        toast.success('Admin account reset successfully!');
+        // Auto-fill the form with default credentials
+        setValue('email', 'admin@diamondgarment.com');
+        setValue('password', 'admin123');
+      } else {
+        toast.error(response.message || 'Failed to reset admin account');
+      }
+    } catch (error: any) {
+      console.error('Admin reset error:', error);
+      toast.error(error.response?.data?.message || 'Failed to reset admin account');
+    } finally {
+      setIsCreatingAdmin(false);
+    }
+  };
+
+  if (authLoading) {
+    return (
+      <div className="admin-login-page">
+        <div className="login-container">
+          <div className="loading-spinner">
+            <Loader2 className="animate-spin" size={40} />
+            <p>Loading...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="admin-login-page">
@@ -99,20 +117,57 @@ const AdminLogin: React.FC = () => {
           <div className="login-header">
             <h2>Diamond Garment</h2>
             <p>Admin Panel Login</p>
-            {import.meta.env.DEV && (
-              <div style={{ 
-                background: '#f0f8ff', 
-                padding: '10px', 
-                borderRadius: '4px', 
-                fontSize: '12px',
-                marginTop: '10px',
-                border: '1px solid #ccc'
-              }}>
-                <strong>Development Mode - Default Admin Credentials:</strong><br/>
-                Email: admin@diamondgarment.com<br/>
-                Password: admin123
-              </div>
-            )}
+            
+            {/* Development/Debug Info */}
+            <div style={{ 
+              background: '#f0f8ff', 
+              padding: '10px', 
+              borderRadius: '4px', 
+              fontSize: '12px',
+              marginTop: '10px',
+              border: '1px solid #ccc'
+            }}>
+              <strong>Default Admin Credentials:</strong><br/>
+              Email: admin@diamondgarment.com<br/>
+              Password: admin123
+            </div>
+
+            {/* Admin Management Buttons */}
+            <div style={{ marginTop: '10px', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+              <button
+                type="button"
+                onClick={handleCreateAdmin}
+                disabled={isCreatingAdmin}
+                style={{
+                  padding: '5px 10px',
+                  fontSize: '12px',
+                  backgroundColor: '#28a745',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer'
+                }}
+              >
+                {isCreatingAdmin ? 'Creating...' : 'Create Admin'}
+              </button>
+              
+              <button
+                type="button"
+                onClick={handleResetAdmin}
+                disabled={isCreatingAdmin}
+                style={{
+                  padding: '5px 10px',
+                  fontSize: '12px',
+                  backgroundColor: '#dc3545',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  cursor: 'pointer'
+                }}
+              >
+                {isCreatingAdmin ? 'Resetting...' : 'Reset Admin'}
+              </button>
+            </div>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="login-form-content">
@@ -132,6 +187,7 @@ const AdminLogin: React.FC = () => {
                   }
                 })}
                 disabled={isLoading}
+                placeholder="admin@diamondgarment.com"
               />
               {errors.email && (
                 <span className="error-message">{errors.email.message}</span>
@@ -155,13 +211,13 @@ const AdminLogin: React.FC = () => {
                     }
                   })}
                   disabled={isLoading}
+                  placeholder="admin123"
                 />
                 <button
                   type="button"
                   className="password-toggle"
                   onClick={() => setShowPassword(!showPassword)}
                   disabled={isLoading}
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
@@ -171,20 +227,14 @@ const AdminLogin: React.FC = () => {
               )}
             </div>
 
-            {errors.root && (
-              <div className="alert alert-error">
-                {errors.root.message}
-              </div>
-            )}
-
             <button
               type="submit"
-              className="btn btn-primary btn-login"
+              className="login-button"
               disabled={isLoading}
             >
               {isLoading ? (
                 <>
-                  <Loader2 size={20} className="animate-spin" />
+                  <Loader2 className="animate-spin" size={20} />
                   Logging in...
                 </>
               ) : (
