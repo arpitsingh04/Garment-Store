@@ -148,7 +148,7 @@ const InteractiveContactForm: React.FC = () => {
           <div className="input-wrapper">
             <div className="input-icon">
               {getFieldIcon('name')}
-            </div>
+            </div> 
             <input
               type="text"
               name="name"
@@ -261,6 +261,7 @@ const InteractiveContactForm: React.FC = () => {
 
         <div className={`form-group full-width ${focusedField === 'message' ? 'focused' : ''} ${isFieldValid('message') ? 'valid' : ''}`}>
           <div className="textarea-wrapper">
+            
             <textarea
               name="message"
               value={formData.message}

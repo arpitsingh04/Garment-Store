@@ -63,6 +63,7 @@
 
 .input-icon {
   position: absolute;
+  /* background-color: red; */
   left: 1rem;
   color: var(--primary-gray);
   transition: all 0.3s ease;

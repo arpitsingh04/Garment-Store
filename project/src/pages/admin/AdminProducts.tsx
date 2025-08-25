@@ -49,7 +49,7 @@ const AdminProducts: React.FC = () => {
 
   // Handle image preview
   useEffect(() => {
-    if (imageFile && imageFile.length > 0) {
+    if (imageFile && imageFile instanceof FileList && imageFile.length > 0) {
       const file = imageFile[0];
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -98,7 +98,7 @@ const AdminProducts: React.FC = () => {
       let imageUrl = '';
       
       // Upload new image if selected
-      if (data.image && data.image.length > 0) {
+      if (data.image && data.image instanceof FileList && data.image.length > 0) {
         const uploadResponse = await uploadAPI.uploadImage(data.image[0]);
         if (uploadResponse.success && uploadResponse.data) {
           imageUrl = uploadResponse.data.filePath;
@@ -173,6 +173,12 @@ const AdminProducts: React.FC = () => {
     return `/uploads/${image}`;
   };
 
+  // Calculate category stats
+  const categoryStats = CATEGORIES.reduce((acc, category) => {
+    acc[category] = products.filter(product => product.category === category).length;
+    return acc;
+  }, {} as Record<string, number>);
+
   if (loading) {
     return (
       <div className="admin-loading">
@@ -185,11 +191,34 @@ const AdminProducts: React.FC = () => {
   return (
     <div className="admin-products">
       <div className="page-header">
-        <h2>Products</h2>
-        <button className="btn btn-primary" onClick={openAddModal}>
-          <Plus size={20} />
-          Add Product
-        </button>
+        <div className="header-content">
+          <h2>Products</h2>
+          <p className="header-subtitle">Manage your product catalog and inventory</p>
+        </div>
+        
+        <div className="header-actions">
+          <div className="header-stats">
+            <div className="stat-item">
+              <span className="stat-number">{products.length}</span>
+              <span className="stat-label">Total</span>
+            </div>
+            <div className="header-divider"></div>
+            <div className="stat-item">
+              <span className="stat-number">{CATEGORIES.length}</span>
+              <span className="stat-label">Categories</span>
+            </div>
+            <div className="header-divider"></div>
+            <div className="stat-item">
+              <span className="stat-number">{Object.values(categoryStats).filter(count => count > 0).length}</span>
+              <span className="stat-label">Active</span>
+            </div>
+          </div>
+          
+          <button className="btn btn-primary" onClick={openAddModal}>
+            <Plus size={20} />
+            Add Product
+          </button>
+        </div>
       </div>
 
       <div className="products-table-container">

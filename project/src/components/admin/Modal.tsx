@@ -48,11 +48,11 @@ const Modal: React.FC<ModalProps> = ({
 
   return (
     <div className="modal-overlay" onClick={handleBackdropClick}>
-      <div className={`modal-container ${size}`}>
+      <div className={`modal ${size}`}>
         <div className="modal-header">
           <h3 className="modal-title">{title}</h3>
           <button
-            className="modal-close-btn"
+            className="modal-close"
             onClick={onClose}
             aria-label="Close modal"
           >

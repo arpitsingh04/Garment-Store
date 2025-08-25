@@ -36,18 +36,7 @@ export const getApiUrl = (endpoint: string): string => {
   return endpoint.startsWith('/api') ? endpoint : `/api/${endpoint.replace(/^\//, '')}`;
 };
 
-// Debug function to log API configuration
-export const debugApiConfig = () => {
-  console.log('API Configuration:', {
-    environment: import.meta.env.PROD ? 'production' : 'development',
-    baseUrl: API_BASE_URL,
-    envVar: import.meta.env.VITE_API_BASE_URL,
-    sampleUrl: getApiUrl('auth/login')
-  });
-};
-
 export default {
   API_BASE_URL,
-  getApiUrl,
-  debugApiConfig
+  getApiUrl
 };

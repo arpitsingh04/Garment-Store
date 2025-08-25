@@ -9,10 +9,7 @@ import {
   Contact,
   User
 } from '../types/admin';
-import { API_BASE_URL, getApiUrl, debugApiConfig } from '../config/api';
-
-// Debug API configuration on load
-debugApiConfig();
+import { API_BASE_URL, getApiUrl } from '../config/api';
 
 // Create axios instance with proper base URL
 const getBaseURL = () => {
@@ -44,40 +41,13 @@ api.interceptors.request.use((config) => {
     config.headers['X-Session-ID'] = sessionId;
   }
 
-  // Log request in development
-  if (!import.meta.env.PROD) {
-    console.log('API Request:', {
-      method: config.method?.toUpperCase(),
-      url: config.url,
-      baseURL: config.baseURL,
-      fullUrl: `${config.baseURL}${config.url}`
-    });
-  }
-
   return config;
 });
 
 // Response interceptor to handle auth errors
 api.interceptors.response.use(
-  (response) => {
-    // Log response in development
-    if (!import.meta.env.PROD) {
-      console.log('API Response:', {
-        status: response.status,
-        url: response.config.url,
-        data: response.data
-      });
-    }
-    return response;
-  },
+  (response) => response,
   (error) => {
-    console.error('API Error:', {
-      status: error.response?.status,
-      message: error.response?.data?.message || error.message,
-      url: error.config?.url,
-      fullUrl: error.config ? `${error.config.baseURL}${error.config.url}` : 'unknown'
-    });
-
     if (error.response?.status === 401) {
       // Only redirect if we're not already on the login page and not during login attempt
       const currentPath = window.location.hash;
@@ -143,15 +113,6 @@ export const authAPI = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
     try {
       const browserInfo = getBrowserInfo();
-      console.log('Making login request with credentials:', {
-        email: credentials.email,
-        password: '[HIDDEN]',
-        clientInfo: {
-          browser: browserInfo.browser,
-          screenSize: `${browserInfo.screenWidth}x${browserInfo.screenHeight}`,
-          language: browserInfo.language
-        }
-      });
 
       const response: AxiosResponse<AuthResponse> = await api.post('/auth/login', {
         ...credentials,
@@ -161,16 +122,9 @@ export const authAPI = {
           language: browserInfo.language
         }
       });
-
-      console.log('Login response received:', {
-        success: response.data.success,
-        hasToken: !!response.data.token,
-        hasData: !!response.data.data
-      });
       
       return response.data;
     } catch (error) {
-      console.error('Login API error:', error);
       throw error;
     }
   },
@@ -179,7 +133,7 @@ export const authAPI = {
     try {
       await api.post('/auth/logout');
     } catch (error) {
-      console.error('Logout API error:', error);
+      // Silent fail for logout
     } finally {
       localStorage.removeItem('admin_token');
       localStorage.removeItem('admin_session_id');
@@ -188,18 +142,6 @@ export const authAPI = {
 
   getMe: async (): Promise<ApiResponse<User>> => {
     const response: AxiosResponse<ApiResponse<User>> = await api.get('/auth/me');
-    return response.data;
-  },
-
-  // Helper method to create admin (for initial setup)
-  createAdmin: async (): Promise<ApiResponse<any>> => {
-    const response: AxiosResponse<ApiResponse<any>> = await api.post('/auth/create-admin');
-    return response.data;
-  },
-
-  // Helper method to reset admin (emergency use)
-  resetAdmin: async (): Promise<ApiResponse<any>> => {
-    const response: AxiosResponse<ApiResponse<any>> = await api.post('/auth/reset-admin');
     return response.data;
   }
 };

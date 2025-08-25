@@ -56,7 +56,7 @@ const AdminTestimonials: React.FC = () => {
 
   // Handle image preview
   useEffect(() => {
-    if (imageFile && imageFile.length > 0) {
+    if (imageFile && imageFile instanceof FileList && imageFile.length > 0) {
       const file = imageFile[0];
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -112,7 +112,7 @@ const AdminTestimonials: React.FC = () => {
       let imageUrl = '';
       
       // Upload new image if selected
-      if (data.image && data.image.length > 0) {
+      if (data.image && data.image instanceof FileList && data.image.length > 0) {
         const uploadResponse = await uploadAPI.uploadImage(data.image[0]);
         if (uploadResponse.success && uploadResponse.data) {
           imageUrl = uploadResponse.data.filePath;

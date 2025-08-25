@@ -9,7 +9,8 @@ import {
   Star, 
   Mail, 
   LogOut,
-  User
+  User,
+  ChevronRight
 } from 'lucide-react';
 import { useAuth } from '../../hooks/useAuth';
 import './AdminLayout.css';
@@ -66,7 +67,15 @@ const AdminLayout: React.FC = () => {
       {/* Sidebar */}
       <div className={`sidebar ${sidebarOpen ? 'active' : ''}`}>
         <div className="sidebar-header">
-          <h3>Diamond Garment</h3>
+          <div className="brand-container">
+            <div className="brand-icon">
+              <div className="diamond-icon">💎</div>
+            </div>
+            <div className="brand-text">
+              <h3>Diamond Garment</h3>
+              <span>Admin Panel</span>
+            </div>
+          </div>
           <button 
             className="btn-close-sidebar md:hidden" 
             onClick={closeSidebar}
@@ -77,32 +86,58 @@ const AdminLayout: React.FC = () => {
         </div>
         
         <div className="sidebar-menu">
-          <ul>
-            {menuItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = location.pathname === item.path;
-              
-              return (
-                <li 
-                  key={item.id} 
-                  className={isActive ? 'active' : ''}
-                  onClick={() => navigate(item.path)}
-                >
-                  <a href="#" onClick={(e) => e.preventDefault()}>
-                    <Icon size={20} />
-                    <span>{item.label}</span>
-                  </a>
-                </li>
-              );
-            })}
-            
-            <li onClick={handleLogout} className="logout-item">
-              <a href="#" onClick={(e) => e.preventDefault()}>
-                <LogOut size={20} />
-                <span>Logout</span>
-              </a>
-            </li>
-          </ul>
+          <div className="menu-section">
+            <span className="menu-section-title">Navigation</span>
+            <ul>
+              {menuItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = location.pathname === item.path;
+                
+                return (
+                  <li 
+                    key={item.id} 
+                    className={`menu-item ${isActive ? 'active' : ''}`}
+                    onClick={() => navigate(item.path)}
+                  >
+                    <a href="#" onClick={(e) => e.preventDefault()}>
+                      <div className="menu-icon">
+                        <Icon size={20} />
+                      </div>
+                      <span className="menu-label">{item.label}</span>
+                      <ChevronRight size={16} className="menu-arrow" />
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+          
+          <div className="menu-section">
+            <span className="menu-section-title">Account</span>
+            <ul>
+              <li className="menu-item logout-item" onClick={handleLogout}>
+                <a href="#" onClick={(e) => e.preventDefault()}>
+                  <div className="menu-icon">
+                    <LogOut size={20} />
+                  </div>
+                  <span className="menu-label">Logout</span>
+                  <ChevronRight size={16} className="menu-arrow" />
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="sidebar-footer">
+          <div className="user-profile">
+            <div className="user-avatar">
+              <User size={20} />
+            </div>
+            <div className="user-details">
+              <span className="user-name">{user?.name || 'Admin User'}</span>
+              <span className="user-role">Administrator</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -118,18 +153,30 @@ const AdminLayout: React.FC = () => {
       <div className="main-content">
         {/* Topbar */}
         <div className="topbar">
-          <button 
-            className="btn-toggle-sidebar md:hidden"
-            onClick={openSidebar}
-            aria-label="Open sidebar"
-          >
-            <Menu size={20} />
-          </button>
+          <div className="topbar-left">
+            <button 
+              className="btn-toggle-sidebar md:hidden"
+              onClick={openSidebar}
+              aria-label="Open sidebar"
+            >
+              <Menu size={20} />
+            </button>
+            
+            <div className="breadcrumb">
+              <span className="breadcrumb-item">Admin</span>
+              <ChevronRight size={16} className="breadcrumb-separator" />
+              <span className="breadcrumb-item current">
+                {menuItems.find(item => item.path === location.pathname)?.label || 'Dashboard'}
+              </span>
+            </div>
+          </div>
           
-          <div className="user-info">
-            <span className="hidden sm:inline">{user?.name || 'Admin User'}</span>
-            <div className="user-avatar">
-              <User size={24} />
+          <div className="topbar-right">
+            <div className="user-info">
+              <div className="user-avatar-small">
+                <User size={18} />
+              </div>
+              <span className="hidden sm:inline">{user?.name || 'Admin User'}</span>
             </div>
           </div>
         </div>

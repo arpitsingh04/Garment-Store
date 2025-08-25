@@ -6,8 +6,50 @@
 }
 
 .gallery-table-container {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.03);
   overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  display: block !important;
+  visibility: visible !important;
+}
+
+.gallery-table-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-red) 100%);
+}
+
+/* Ensure gallery table is visible on mobile */
+@media (max-width: 768px) {
+  .admin-gallery .gallery-table-container,
+  .admin-gallery .table-responsive,
+  .admin-gallery .admin-table {
+    display: block !important;
+    visibility: visible !important;
+  }
+  
+  .admin-gallery .admin-table {
+    display: table !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .admin-gallery .gallery-table-container,
+  .admin-gallery .table-responsive,
+  .admin-gallery .admin-table {
+    display: block !important;
+    visibility: visible !important;
+  }
+  
+  .admin-gallery .admin-table {
+    display: table !important;
+  }
 }
