@@ -3,6 +3,7 @@ import { Plus, Edit, Trash2, Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { GalleryItem, GalleryFormData, CATEGORIES } from '../../types/admin';
 import { galleryAPI, uploadAPI } from '../../utils/api';
+import { getAssetUrl } from '../../config/api';
 import Modal from '../../components/admin/Modal';
 import toast from 'react-hot-toast';
 import './AdminGallery.css';
@@ -49,7 +50,7 @@ const AdminGallery: React.FC = () => {
 
   // Handle image preview
   useEffect(() => {
-    if (imageFile && imageFile.length > 0) {
+    if (imageFile && imageFile instanceof FileList && imageFile.length > 0) {
       const file = imageFile[0];
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -63,7 +64,7 @@ const AdminGallery: React.FC = () => {
         : editingItem.image.startsWith('/uploads/') 
         ? editingItem.image 
         : `/uploads/${editingItem.image}`;
-      setImagePreview(imgSrc);
+      setImagePreview(getAssetUrl(imgSrc));
     } else {
       setImagePreview('');
     }
@@ -167,8 +168,8 @@ const AdminGallery: React.FC = () => {
 
   const getImageSrc = (image: string) => {
     if (image.startsWith('http')) return image;
-    if (image.startsWith('/uploads/')) return image;
-    return `/uploads/${image}`;
+    const path = image.startsWith('/uploads/') ? image : `/uploads/${image}`;
+    return getAssetUrl(path);
   };
 
   if (loading) {

@@ -3,6 +3,7 @@ import { Plus, Edit, Trash2, Loader2, Star } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { Testimonial, TestimonialFormData } from '../../types/admin';
 import { testimonialsAPI, uploadAPI } from '../../utils/api';
+import { getAssetUrl } from '../../config/api';
 import Modal from '../../components/admin/Modal';
 import toast from 'react-hot-toast';
 import './AdminTestimonials.css';
@@ -70,7 +71,7 @@ const AdminTestimonials: React.FC = () => {
         : editingTestimonial.image.startsWith('/uploads/') 
         ? editingTestimonial.image 
         : `/uploads/${editingTestimonial.image}`;
-      setImagePreview(imgSrc);
+      setImagePreview(getAssetUrl(imgSrc));
     } else {
       setImagePreview('');
     }
@@ -187,8 +188,8 @@ const AdminTestimonials: React.FC = () => {
 
   const getImageSrc = (image: string) => {
     if (image.startsWith('http')) return image;
-    if (image.startsWith('/uploads/')) return image;
-    return `/uploads/${image}`;
+    const path = image.startsWith('/uploads/') ? image : `/uploads/${image}`;
+    return getAssetUrl(path);
   };
 
   const renderStars = (rating: number) => {

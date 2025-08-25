@@ -85,13 +85,13 @@ export interface ProductFormData {
   name: string;
   category: string;
   description: string;
-  image?: File;
+  image?: FileList; // react-hook-form returns FileList for <input type="file" />
 }
 
 export interface GalleryFormData {
   title: string;
   category: string;
-  image?: File;
+  image?: FileList; // react-hook-form returns FileList for <input type="file" />
 }
 
 export interface TestimonialFormData {
@@ -102,7 +102,7 @@ export interface TestimonialFormData {
   rating: number;
   featured: boolean;
   approved: boolean;
-  image?: File;
+  image?: FileList; // react-hook-form returns FileList for <input type="file" />
 }
 
 export type CategoryType = 'Hospital' | 'School' | 'Sports' | 'Hotel' | 'Industrial' | 'Scout & NCC';

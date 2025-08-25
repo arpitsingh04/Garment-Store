@@ -3,6 +3,7 @@ import { Plus, Edit, Trash2, Loader2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { Product, ProductFormData, CATEGORIES } from '../../types/admin';
 import { productsAPI, uploadAPI } from '../../utils/api';
+import { getAssetUrl } from '../../config/api';
 import Modal from '../../components/admin/Modal';
 import toast from 'react-hot-toast';
 import './AdminProducts.css';
@@ -63,7 +64,7 @@ const AdminProducts: React.FC = () => {
         : editingProduct.image.startsWith('/uploads/') 
         ? editingProduct.image 
         : `/uploads/${editingProduct.image}`;
-      setImagePreview(imgSrc);
+      setImagePreview(getAssetUrl(imgSrc));
     } else {
       setImagePreview('');
     }
@@ -169,8 +170,8 @@ const AdminProducts: React.FC = () => {
 
   const getImageSrc = (image: string) => {
     if (image.startsWith('http')) return image;
-    if (image.startsWith('/uploads/')) return image;
-    return `/uploads/${image}`;
+    const path = image.startsWith('/uploads/') ? image : `/uploads/${image}`;
+    return getAssetUrl(path);
   };
 
   // Calculate category stats

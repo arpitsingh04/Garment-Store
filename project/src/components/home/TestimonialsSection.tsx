@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper/modules';
 import { Star, Quote } from 'lucide-react';
-import { getApiUrl } from '../../config/api';
+import { getApiUrl, getAssetUrl } from '../../config/api';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
@@ -29,8 +29,8 @@ const TestimonialsSection: React.FC = () => {
   // Function to get correct image source
   const getImageSrc = (image: string) => {
     if (image.startsWith('http')) return image;
-    if (image.startsWith('/uploads/')) return image;
-    return `/uploads/${image}`;
+    const path = image.startsWith('/uploads/') ? image : `/uploads/${image}`;
+    return getAssetUrl(path);
   };
 
   // Fetch testimonials from API
@@ -158,7 +158,7 @@ const TestimonialsSection: React.FC = () => {
                         alt={testimonial.name}
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
-                          target.src = '/api/placeholder/80/80';
+                          target.src = getApiUrl('/placeholder/80/80');
                         }}
                       />
                     </div>

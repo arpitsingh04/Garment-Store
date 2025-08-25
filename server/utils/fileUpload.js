@@ -5,15 +5,8 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Set storage engine
-const storage = multer.diskStorage({
-  destination: function(req, file, cb) {
-    cb(null, path.join(__dirname, '../public/uploads/'));
-  },
-  filename: function(req, file, cb) {
-    cb(null, `${Date.now()}-${file.originalname}`);
-  }
-});
+// Use memory storage so we can upload buffer to Cloudinary or write to disk
+const storage = multer.memoryStorage();
 
 // Check file type
 function checkFileType(file, cb) {

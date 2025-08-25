@@ -36,7 +36,19 @@ export const getApiUrl = (endpoint: string): string => {
   return endpoint.startsWith('/api') ? endpoint : `/api/${endpoint.replace(/^\//, '')}`;
 };
 
+// Helper to build absolute URLs for assets served by backend (e.g., /uploads/...)
+export const getAssetUrl = (assetPath: string): string => {
+  if (assetPath.startsWith('http')) return assetPath;
+  const cleanPath = assetPath.replace(/^\//, '');
+  if (import.meta.env.PROD) {
+    const baseUrl = API_BASE_URL || 'https://diamond-garment.onrender.com';
+    return `${baseUrl}/${cleanPath}`;
+  }
+  return `/${cleanPath}`;
+};
+
 export default {
   API_BASE_URL,
-  getApiUrl
+  getApiUrl,
+  getAssetUrl
 };
