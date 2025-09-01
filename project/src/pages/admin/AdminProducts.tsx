@@ -27,7 +27,7 @@ const AdminProducts: React.FC = () => {
     watch
   } = useForm<ProductFormData>();
 
-  const imageFile = watch('image');
+  const imageUrl = watch('imageUrl');
 
   const loadProducts = async () => {
     try {
@@ -50,25 +50,15 @@ const AdminProducts: React.FC = () => {
 
   // Handle image preview
   useEffect(() => {
-    if (imageFile && imageFile instanceof FileList && imageFile.length > 0) {
-      const file = imageFile[0];
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImagePreview(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
-    } else if (editingProduct && !imageFile) {
+    if (imageUrl && imageUrl.trim()) {
+      setImagePreview(imageUrl);
+    } else if (editingProduct && !imageUrl) {
       // Show existing image when editing
-      const imgSrc = editingProduct.image.startsWith('http') 
-        ? editingProduct.image 
-        : editingProduct.image.startsWith('/uploads/') 
-        ? editingProduct.image 
-        : `/uploads/${editingProduct.image}`;
-      setImagePreview(getAssetUrl(imgSrc));
+      setImagePreview(editingProduct.image);
     } else {
       setImagePreview('');
     }
-  }, [imageFile, editingProduct]);
+  }, [imageUrl, editingProduct]);
 
   const openAddModal = () => {
     setEditingProduct(null);
@@ -82,6 +72,7 @@ const AdminProducts: React.FC = () => {
     setValue('name', product.name);
     setValue('category', product.category as any);
     setValue('description', product.description);
+    setValue('imageUrl', product.image);
     setModalOpen(true);
   };
 
@@ -96,31 +87,18 @@ const AdminProducts: React.FC = () => {
     try {
       setSubmitting(true);
       
-      let imageUrl = '';
-      
-      // Upload new image if selected
-      if (data.image && data.image instanceof FileList && data.image.length > 0) {
-        const uploadResponse = await uploadAPI.uploadImage(data.image[0]);
-        if (uploadResponse.success && uploadResponse.data) {
-          imageUrl = uploadResponse.data.filePath;
-        } else {
-          throw new Error('Image upload failed');
-        }
+      // Validate image URL for new products
+      if (!editingProduct && !data.imageUrl?.trim()) {
+        toast.error('Please enter an image URL');
+        return;
       }
 
       const productData = {
         name: data.name,
         category: data.category,
         description: data.description,
-        ...(imageUrl && { image: imageUrl }),
-        ...(editingProduct && !imageUrl && { image: editingProduct.image })
+        image: data.imageUrl || editingProduct?.image || ''
       };
-
-      // Validate image for new products
-      if (!editingProduct && !imageUrl) {
-        toast.error('Please select an image');
-        return;
-      }
 
       let response;
       if (editingProduct) {
@@ -169,7 +147,9 @@ const AdminProducts: React.FC = () => {
   };
 
   const getImageSrc = (image: string) => {
+    // If it's already a full URL, return as is
     if (image.startsWith('http')) return image;
+    // Otherwise, treat as uploaded file path
     const path = image.startsWith('/uploads/') ? image : `/uploads/${image}`;
     return getAssetUrl(path);
   };
@@ -364,22 +344,28 @@ const AdminProducts: React.FC = () => {
 
           <div className="form-group">
             <label className="form-label">
-              Image {!editingProduct && '*'}
+              Image URL {!editingProduct && '*'}
             </label>
             <input
-              type="file"
-              className="form-control"
-              accept="image/*"
-              {...register('image', {
-                required: !editingProduct ? 'Image is required' : false
+              type="url"
+              className={`form-control ${errors.imageUrl ? 'error' : ''}`}
+              placeholder="https://example.com/image.jpg"
+              {...register('imageUrl', {
+                required: !editingProduct ? 'Image URL is required' : false,
+                pattern: {
+                  value: /^https?:\/\/.+\.(jpg|jpeg|png|gif|webp)/i,
+                  message: 'Please enter a valid image URL'
+                }
               })}
             />
-            {errors.image && (
-              <span className="error-message">{errors.image.message}</span>
+            {errors.imageUrl && (
+              <span className="error-message">{errors.imageUrl.message}</span>
             )}
             {imagePreview && (
               <div className="image-preview">
-                <img src={imagePreview} alt="Preview" />
+                <img src={imagePreview} alt="Preview" onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }} />
               </div>
             )}
           </div>

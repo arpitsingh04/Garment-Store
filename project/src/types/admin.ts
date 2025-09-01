@@ -85,7 +85,7 @@ export interface ProductFormData {
   name: string;
   category: string;
   description: string;
-  image?: FileList; // react-hook-form returns FileList for <input type="file" />
+  imageUrl?: string; // URL for external images
 }
 
 export interface GalleryFormData {
